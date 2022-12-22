@@ -13,25 +13,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import ch.qos.logback.classic.Logger;
-
 @RestController
 @RequestMapping("/products")
 public class ProductApi {
 
-	@Autowired private ProductRepository repo;
-	
+	@Autowired
+	private ProductRepository repo;
+
 	@PostMapping
 	public ResponseEntity<Product> create(@RequestBody @Valid Product product) {
 		Product savedProduct = repo.save(product);
 		URI productURI = URI.create("/products/" + savedProduct.getId());
-		//System.out.println();
 		return ResponseEntity.created(productURI).body(savedProduct);
 	}
-	
+
 	@GetMapping
 	public List<Product> list() {
-		System.out.println(repo.findAll());
 		return repo.findAll();
 	}
 }

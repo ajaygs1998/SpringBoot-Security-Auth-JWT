@@ -24,53 +24,59 @@ import com.cybage.user.UserRepository;
 public class ApplicationSecurity {
 
 	@Autowired
-	private UserRepository userRepo;
+	private UserRepository userRepository;
 	@Autowired
 	private JwtTokenFilter jwtTokenFilter;
 
-	@Bean
-	public UserDetailsService userDetailsService() {
-		return new UserDetailsService() {
+    @Bean
+    UserDetailsService userDetailsService() {
+        return new UserDetailsService() {
 
-			@Override
-			public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-				return userRepo.findByEmail(username)
-						.orElseThrow(() -> new UsernameNotFoundException("User " + username + " not found"));
-			}
-		};
-	}
+            @Override
+            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+                return userRepository.findByEmail(username)
+                        .orElseThrow(() -> new UsernameNotFoundException("User " + username + " not found"));
+            }
+        };
+    }
 
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-		return authConfig.getAuthenticationManager();
-	}
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception
+    	
+    {
+    	
+        return authConfig.getAuthenticationManager();
+			
+		
 
-	 @Bean
-	    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-		http
-		.csrf()
-		.disable()
-		.sessionManagement()
-		.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-		.and()
-		.authorizeRequests()
-		.antMatchers("/auth/login", "/docs/**", "/users")
-		.permitAll()
-		.anyRequest()
-		.authenticated()
-		.and()
-		.exceptionHandling()
-		.authenticationEntryPoint((request, response, ex) -> {
-			response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage());
-		})
-		.and()
-		.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+    }
 
-		return http.build();
-	}
+    @Bean
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+                .csrf()
+                .disable()
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                .antMatchers("/auth/login", "/docs/**", "/users")
+                .permitAll()
+                .anyRequest()
+                .authenticated()
+                .and()
+                .exceptionHandling()
+                .authenticationEntryPoint((request, response, ex) -> 
+                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, ex.getMessage())
+                )
+                .and()
+                .addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
+
+        return http.build();
+    }
 }

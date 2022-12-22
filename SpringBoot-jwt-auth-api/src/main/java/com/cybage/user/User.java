@@ -1,6 +1,7 @@
 package com.cybage.user;
 
 import java.util.Collection;
+import java.util.Collections;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -57,7 +58,8 @@ public class User implements UserDetails {
 
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return null;
+		return Collections.emptyList();  
+		//return null;
 	}
 
 	@Override

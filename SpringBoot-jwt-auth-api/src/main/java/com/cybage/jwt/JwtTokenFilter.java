@@ -50,7 +50,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 	 * hexadecimal characters, while others may use structured tokens such as JSON
 	 * Web Tokens.
 	 */
-	//header.payload.signature
+	// header.payload.signature
 	private boolean hasAuthorizationBearer(HttpServletRequest request) {
 		String header = request.getHeader("Authorization");
 		if (ObjectUtils.isEmpty(header) || !header.startsWith("Bearer")) {
@@ -62,8 +62,7 @@ public class JwtTokenFilter extends OncePerRequestFilter {
 
 	private String getAccessToken(HttpServletRequest request) {
 		String header = request.getHeader("Authorization");
-		String token = header.split(" ")[1].trim();
-		return token;
+		return header.split(" ")[1].trim();
 	}
 
 	private void setAuthenticationContext(String token, HttpServletRequest request) {
