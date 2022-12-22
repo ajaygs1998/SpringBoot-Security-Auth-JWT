@@ -1,4 +1,4 @@
-package com.cybaage;
+package com.cybage;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
